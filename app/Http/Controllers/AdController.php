@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Advert;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -10,18 +11,24 @@ class AdController extends Controller
 {
 
     protected $request;
+    private $ad;
 
     public function __construct(Request $request)
     {
-        $this->request = $request;
-    }
-    //Показ одного обявления
-    public function showAd ($id) {
 
-        if (!$advert = Advert::find($id)) {
+        $this->request = $request;
+        $this->ad = Advert::find($this->request->route('id'));
+
+        if (($this->request->url() != route('create')) && !$this->ad) {
+
             abort(404);
         }
-        return view('ad')->with('advert',$advert);
+
+    }
+    //Показ одного обявления
+    public function showAd () {
+
+        return view('ad')->with('ad',$this->ad);
 
     }
     //Создание обявления
@@ -39,25 +46,31 @@ class AdController extends Controller
         return view('edit');
     }
     //Редактирование обявления
-    public function edit ($id) {
+    public function edit () {
 
-        if (!$ad = Advert::find($id)) {
-            abort(404);
+        if (Auth::user()->name != $this->ad->author_name) {
+            return Redirect::to('/' . $this->ad->id);
         }
 
         if ($this->request->isMethod('post')) {
-            $ad->title = $this->request['title'];
-            $ad->description = $this->request['desc'];
-            $ad->save();
-            return Redirect::to('/' . $ad->id);
+            $this->ad->title = $this->request['title'];
+            $this->ad->description = $this->request['desc'];
+            $this->ad->save();
+            return Redirect::to('/' . $this->ad->id);
         }
 
-        return view('ad_edit')->with('ad', $ad);
+        return view('ad_edit')->with('ad', $this->ad);
 
     }
     //Удаление обявления
-    public function delete ($id) {
-        Advert::destroy($id);
+    public function delete () {
+
+        if (Auth::user()->name != $this->ad->author_name) {
+            return Redirect::to('/' . $this->ad->id);
+        }
+
+        Advert::destroy($this->ad->id);
         return Redirect::to('/');
     }
+
 }
