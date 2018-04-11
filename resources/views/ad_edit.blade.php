@@ -9,13 +9,11 @@
                     {{ csrf_field() }}
                     <div class="form-group">
                         <label for="exampleFormControlInput1">Заголовок</label>
-                        <input type="text" name="title" class="form-control" placeholder="Заголовок" required value="{{$ad->title}}">
+                        <input type="text" name="title" class="form-control" placeholder="Заголовок" required value="{{$ad->title}}" minlength="4" maxlength="250">
                     </div>
                     <div class="form-group">
                         <label for="exampleFormControlTextarea1">Описание</label>
-                        <textarea class="form-control" name="desc" id="exampleFormControlTextarea1" rows="10" required>
-                        {{$ad->description}}
-                        </textarea>
+                        <textarea class="form-control" name="desc" id="exampleFormControlTextarea1" rows="10" required>{{ $ad->description }}</textarea>
                     </div>
                     <input type="hidden" name="author_name" value="{{ Auth::user()->name }}">
                     <button type="submit" class="btn btn-warning">Save</button>
@@ -24,4 +22,5 @@
             </div>
         </div>
     </div>
+
 @endsection

@@ -12,6 +12,10 @@ class MainController extends Controller
     //Отображение главной страницы
     public function index() {
         $ads = Advert::paginate(5);
+        foreach ($ads as $ad) {
+            $ad->description = mb_strimwidth($ad->description, 0, 500, "...");
+        }
+
         return view('main')->with('ads', $ads);
     }
 

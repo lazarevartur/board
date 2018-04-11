@@ -71,11 +71,7 @@
                             <small style="float: right; ">{{$ad->created_at}}</small>
                             @if (Auth::check() && Auth::user()->name == $ad->author_name)
                                 <br>
-                                <a href="/edit/{{ $ad->id }}" class="btn btn-warning">Edit</a>
-                                <form method="POST" action="/delete/{{ $ad->id }}">
-                                    {{ csrf_field() }}
-                                    <button style="margin-top: 10px" class="btn btn-danger">Delete</button>
-                                </form>
+                                <a href="/edit/{{ $ad->id }}" class="btn btn-warning">Edit</a>  <a style="float: right" href="/delete/{{ $ad->id }}" class="btn btn-danger">Delete</a>
                             @endif
                             <hr>
                         @endforeach

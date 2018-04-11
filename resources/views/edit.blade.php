@@ -1,7 +1,6 @@
 @extends('default.app')
 
 @section('content')
-
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
@@ -9,7 +8,7 @@
                     {{ csrf_field() }}
                     <div class="form-group">
                         <label for="exampleFormControlInput1">Заголовок</label>
-                        <input type="text" name="title" class="form-control" placeholder="Заголовок" required>
+                        <input type="text" name="title" class="form-control" placeholder="Заголовок" required minlength="4" maxlength="250">
                     </div>
                     <div class="form-group">
                         <label for="exampleFormControlTextarea1">Описание</label>

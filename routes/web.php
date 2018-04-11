@@ -12,21 +12,30 @@
 */
 
 Route::get('/', 'MainController@index')->middleware('web');
-Route::get('/{id}', 'AdController@showAd')->where('id', '[0-9]+');
+Route::get('/login','MainController@login');
+Route::get('/{id?}', 'AdController@showAd')->where('id', '[0-9]+');
+
 
 Route::post('/login','MainController@login')->middleware('AuthOrReg')->name('login');
 Route::post('/logout','MainController@logout')->name('logout');
-Route::post('/delete/{id}', 'AdController@delete')->where('id', '[0-9]+');
 
-Route::match(['get', 'post'],'/edit',[
-    'uses' => 'AdController@create',
-    'middleware' => 'auth',
-    'as' => 'create',
-]);
-Route::match(['get', 'post'],'/edit/{id}',[
-    'uses' => 'AdController@edit',
-    'as' => 'edit',
-]);
+Route::group(['middleware' => 'auth'], function () {
+
+    Route::get('/delete/{id}', 'AdController@delete')->where('id', '[0-9]+');
+
+    Route::match(['get', 'post'],'/edit',[
+        'uses' => 'AdController@create',
+        'as' => 'create',
+    ]);
+    Route::match(['get', 'post'],'/edit/{id}',[
+        'uses' => 'AdController@edit',
+        'as' => 'edit',
+    ]);
+
+});
+
+
+
 
 
 
